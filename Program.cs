@@ -84,7 +84,6 @@ namespace zablje_trolovanje
                 }
             }
 
-            Game.Print(ObjectManager.Player.Position.ToString());
             if (fountain.GetValue<EnsoulSharp.SDK.MenuUI.MenuBool>("blue").Enabled)
             {
                 if (!ObjectManager.Player.IsDead)
