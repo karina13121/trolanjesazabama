@@ -8,10 +8,8 @@ namespace zablje_trolovanje
 {
     class Program
     {
-        static EnsoulSharp.SDK.MenuUI.Menu menu, fountain, chat, follow, solo;
+        static EnsoulSharp.SDK.MenuUI.Menu menu, fountain, chat, follow, solo, ping;
         static Spell Q, W, E, R;
-        static bool b = false;
-        static bool a = false;
         static void Main(string[] args)
         {
             GameEvent.OnGameLoad += GameEvent_OnGameLoad;
@@ -27,6 +25,10 @@ namespace zablje_trolovanje
                 if (follow.GetValue<MenuBool>(ally.CharacterName).Enabled)
                 {
                     GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, ally.Position);
+                }
+                if (ping.GetValue<MenuBool>(ally.CharacterName).Enabled)
+                {
+                    Game.SendPing(PingCategory.EnemyMissing, ally.Position);
                 }
             }
 
@@ -58,7 +60,7 @@ namespace zablje_trolovanje
                     W.Cast(vp);
                     E.Cast();
                     R.Cast(vp);
-                    
+
                 }
             }
             if (solo.GetValue<MenuBool>("solobaron").Enabled)
@@ -173,6 +175,7 @@ namespace zablje_trolovanje
             chat = new EnsoulSharp.SDK.MenuUI.Menu("chat", "Chat", false);
             follow = new Menu("follow", "prati timmejte :D", false);
             solo = new Menu("solo", "Solo :D", false);
+            ping = new Menu("ping", "pingovanje :D", false);
             var splitter = new EnsoulSharp.SDK.MenuUI.MenuSeparator("sep", "nidzo ako si plavi tim tikuj blue da intas, red obrnuto");
             var mbool = new EnsoulSharp.SDK.MenuUI.MenuBool("blue", "Plavi", false);
             var rbool = new EnsoulSharp.SDK.MenuUI.MenuBool("red", "Crveni", false);
@@ -184,6 +187,7 @@ namespace zablje_trolovanje
             foreach (var ally in GameObjects.AllyHeroes)
             {
                 follow.Add(new MenuBool(ally.CharacterName, $"prati: {ally.CharacterName} :D", false));
+                ping.Add(new MenuBool(ally.CharacterName, $"pingaj: {ally.CharacterName} :D", false));
             }
             menu.Add(fountain);
             menu.Add(solo);
@@ -194,6 +198,7 @@ namespace zablje_trolovanje
             chat.Add(toall);
             chat.Add(list);
             menu.Add(chat);
+            menu.Add(ping);
             menu.Add(follow);
             fountain.Add(mbool);
             fountain.Add(rbool);
